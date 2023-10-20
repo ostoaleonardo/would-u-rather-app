@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { useFetchQuestion } from '../hooks/useFetchQuestion'
-import { View, StyleSheet, Pressable, Text } from 'react-native'
-import { Background } from '../components/Background'
 import Animated, { BounceIn, BounceOut } from 'react-native-reanimated'
+import { View, StyleSheet, Pressable, Text } from 'react-native'
+import { useFetchQuestion } from '../hooks/useFetchQuestion'
+import { Background } from '../components/Background'
 import { classic } from '../constants/questions'
 
 export default function Play() {
@@ -10,7 +10,7 @@ export default function Play() {
     const [question, setQuestion] = useState('')
     const [percentage, setPercentage] = useState(0)
     const [isSelected, setIsSelected] = useState(false)
-    const table = 'questions'
+    const table = 'classic'
 
     useEffect(() => {
         getQuestion()

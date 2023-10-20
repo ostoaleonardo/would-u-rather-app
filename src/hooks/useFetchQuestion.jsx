@@ -44,21 +44,23 @@ export const useFetchQuestion = () => {
         return data[0]
     }
 
-    // const setQuestions = async () => {
-    //     const { data, error } = await supabase
-    //         .from('questions')
-    //         .insert(questions)
-    //         .select()
+    const loadQuestions = async (table, questions) => {
+        const { data, error } = await supabase
+            .from(table)
+            .insert(questions)
+            .select()
 
-    //     if (error) {
-    //         console.log(error)
-    //         return null
-    //     }
-    // }
+        if (error) {
+            return error
+        }
+
+        return data
+    }
 
     return {
         getQuestionById,
         updateVotesById,
         getVotesById,
+        loadQuestions,
     }
 }

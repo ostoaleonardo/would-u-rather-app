@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient'
-import { Pressable, StyleSheet, View, Text, Image } from 'react-native'
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { Pressable, StyleSheet, View, Image } from 'react-native'
+import Animated, { BounceIn, BounceOut, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 
 const icon = require('../../assets/icons/check_icon.png')
 
@@ -62,9 +62,12 @@ export function OptionCard({ game, onPress, isVoted = false, isSelected = false 
                     style={styles.gradiant}
                     colors={[game.gradiant[0], game.gradiant[1]]}
                 >
-                    <Text style={styles.option}>
+                    <Animated.Text
+                        style={styles.option}
+                        entering={BounceIn} exiting={BounceOut}
+                    >
                         {game.label}
-                    </Text>
+                    </Animated.Text>
                     {isSelected && (
                         <View style={styles.checkContainer}>
                             <Image

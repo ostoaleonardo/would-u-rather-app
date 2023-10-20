@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
+import { LinearGradient } from 'expo-linear-gradient'
+import { View, StyleSheet, Text } from 'react-native'
 import Animated, { FlipInEasyY, FlipOutEasyY } from 'react-native-reanimated'
 import { useFetchQuestion } from '../hooks/useFetchQuestion'
-import { View, StyleSheet, Text } from 'react-native'
-import { LinearGradient } from 'expo-linear-gradient'
 import { OptionCard } from './OptionCard'
 import { classic } from '../constants/questions'
 
@@ -11,7 +11,7 @@ export function RandomQuestion() {
     const [question, setQuestion] = useState('')
     const [percentage, setPercentage] = useState(0)
     const [isSelected, setIsSelected] = useState('')
-    const table = 'questions'
+    const table = 'classic'
 
     useEffect(() => {
         getQuestion()

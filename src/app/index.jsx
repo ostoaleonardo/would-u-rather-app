@@ -1,16 +1,26 @@
 import React from 'react'
 import { StyleSheet, StatusBar, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Landing } from '../components/Landing'
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
+import { RandomQuestion } from '../components/RandomQuestion'
 import { GameModes } from '../components/GameModes'
+
+const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy'
 
 export default function Home() {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                <Landing />
+                <RandomQuestion />
                 <GameModes />
             </ScrollView>
+            <BannerAd
+                unitId={adUnitId}
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+                requestOptions={{
+                    requestNonPersonalizedAdsOnly: true,
+                }}
+            />
             <StatusBar
                 animated={true}
                 translucent={true}

@@ -1,6 +1,8 @@
 import { LinearGradient } from 'expo-linear-gradient'
-import { Pressable, StyleSheet, View, Text } from 'react-native'
+import { Pressable, StyleSheet, View, Text, Image } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+
+const icon = require('../../assets/icons/check_icon.png')
 
 export function OptionCard({ game, onPress, isVoted = false, isSelected = false }) {
     const width = useSharedValue('100%')
@@ -64,8 +66,11 @@ export function OptionCard({ game, onPress, isVoted = false, isSelected = false 
                         {game.label}
                     </Text>
                     {isSelected && (
-                        <View style={styles.check}>
-                            <Text style={styles.checkText}>✓</Text>
+                        <View style={styles.checkContainer}>
+                            <Image
+                                style={styles.checkImage}
+                                source={icon}
+                            />
                         </View>
                     )}
                 </LinearGradient>
@@ -101,21 +106,19 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontFamily: 'Rubik-Medium',
     },
-    check: {
+    checkContainer: {
         position: 'absolute',
         right: 16,
         bottom: 16,
         width: 30,
         height: 30,
         borderRadius: 100,
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
     },
-    checkText: {
-        fontSize: 16,
-        color: 'white',
-        textAlign: 'center',
-        fontFamily: 'Rubik-Bold',
+    checkImage: {
+        width: 15,
+        height: 15,
     },
 })

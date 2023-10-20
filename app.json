@@ -22,7 +22,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ostoaleonardo.woulduratherapp"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -30,6 +31,17 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "67196a2b-c33d-4519-b5f5-64998a22be21"
+      }
+    }
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-5454307717540089~9143077059"
   }
 }

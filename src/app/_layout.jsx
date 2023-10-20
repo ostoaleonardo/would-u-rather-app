@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
+import 'expo-dev-client'
 
 export default function Layout() {
     const [fontsLoaded, fontError] = useFonts({

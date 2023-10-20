@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
+import Animated, { FlipInEasyY, FlipOutEasyY } from 'react-native-reanimated'
 import { useFetchQuestion } from '../hooks/useFetchQuestion'
 import { View, StyleSheet, Text } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { OptionCard } from './OptionCard'
 import { classic } from '../constants/questions'
 
-export function Landing() {
+export function RandomQuestion() {
     const { getQuestionById, updateVotesById } = useFetchQuestion()
     const [question, setQuestion] = useState('')
     const [percentage, setPercentage] = useState(0)
@@ -61,9 +62,6 @@ export function Landing() {
                     isSelected={isSelected === 'option1'}
                     onPress={() => updateVotes('option1')}
                 />
-                <Text style={styles.percentage}>
-                    {percentage !== 0 ? percentage.toFixed(0) + '%' : 'o'}
-                </Text>
                 <OptionCard
                     game={{
                         label: question.option2,
@@ -73,6 +71,24 @@ export function Landing() {
                     isSelected={isSelected === 'option2'}
                     onPress={() => updateVotes('option2')}
                 />
+            </View>
+            <View style={styles.percentageContainer}>
+                {percentage !== 0 && (
+                    <Animated.Text
+                        style={styles.percentage}
+                        entering={FlipInEasyY} exiting={FlipOutEasyY}
+                    >
+                        {percentage.toFixed(0) + '%'}
+                    </Animated.Text>
+                )}
+                {!isSelected && (
+                    <Animated.Text
+                        style={styles.percentage}
+                        entering={FlipInEasyY} exiting={FlipOutEasyY}
+                    >
+                        o
+                    </Animated.Text>
+                )}
             </View>
         </LinearGradient>
     )
@@ -105,18 +121,28 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         justifyContent: 'center',
     },
+    percentageContainer: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     percentage: {
         position: 'absolute',
         width: 50,
         height: 50,
-        zIndex: 150,
-        fontSize: 16,
+        zIndex: 1000,
+        fontSize: 14,
         aspectRatio: 1,
         color: 'black',
         borderRadius: 100,
         textAlign: 'center',
         textAlignVertical: 'center',
-        fontFamily: 'Rubik-Medium',
+        fontFamily: 'Rubik-Bold',
         backgroundColor: 'white',
     },
 })

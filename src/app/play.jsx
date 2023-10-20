@@ -23,14 +23,14 @@ export default function Play() {
     const getQuestion = async () => {
         setQuestion('')
         setPercentage(0)
-        setIsSelected('')
+        setIsSelected(false)
         const id = getRandomNumber()
         const question = await getQuestionById(table, id)
         setQuestion(question)
     }
 
     const updateVotes = async (option) => {
-        setIsSelected(option)
+        setIsSelected(true)
         option = option === 'option1' ? 'option1Votes' : 'option2Votes'
         const updatedQuestion = await updateVotesById(table, option, question.id)
         setQuestion(updatedQuestion)
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 40,
     },
     optionLabel: {
-        fontSize: 24,
+        fontSize: 18,
         color: 'white',
         textAlign: 'center',
         fontFamily: 'Rubik-Medium',

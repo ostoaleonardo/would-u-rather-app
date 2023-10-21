@@ -1,23 +1,16 @@
 import React from 'react'
-import { StyleSheet, StatusBar, ScrollView, Pressable, Text } from 'react-native'
+import NetInfo from '@react-native-community/netinfo'
+import { StyleSheet, StatusBar, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
-import { useFetchQuestion } from '../hooks/useFetchQuestion'
 import { RandomQuestion } from '../components/RandomQuestion'
 import { GameModes } from '../components/GameModes'
-import { hard } from '../constants/questions'
+import { NoConnection } from '../components/NoConnection'
 
-const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy'
-const dev = process.env.NODE_ENV === 'development'
-const table = 'hard'
+const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-5454307717540089/2986547026'
 
 export default function Home() {
-    const { loadQuestions } = useFetchQuestion()
-
-    const addQuestions = async () => {
-        const data = await loadQuestions(table, hard)
-        console.log(data)
-    }
+    const { isConnected } = NetInfo.useNetInfo()
 
     return (
         <SafeAreaView style={styles.container}>
@@ -25,15 +18,7 @@ export default function Home() {
                 <RandomQuestion />
                 <GameModes />
             </ScrollView>
-            {dev && (
-                <Pressable
-                    style={styles.buttonContainer}
-                >
-                    <Text style={styles.buttonLabel}>
-                        Add question in table {table}
-                    </Text>
-                </Pressable>
-            )}
+            {isConnected !== null && !isConnected && <NoConnection />}
             <BannerAd
                 unitId={adUnitId}
                 size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}

@@ -17,7 +17,7 @@ export default function Play() {
     }, [])
 
     const getRandomNumber = () => {
-        return Math.floor(Math.random() * classic.length) + 1
+        return Math.floor(Math.random() * classic.length)
     }
 
     const getQuestion = async () => {

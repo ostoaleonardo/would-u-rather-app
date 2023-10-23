@@ -4,21 +4,9 @@ import Animated, { BounceIn, BounceOut, useAnimatedStyle, useSharedValue, withSp
 
 const icon = require('../../assets/icons/check_icon.png')
 
-export function OptionCard({ game, onPress, isVoted = false, isSelected = false }) {
-    const width = useSharedValue('100%')
-    const height = useSharedValue(200)
-    const translateY = useSharedValue(0)
+export function OptionCard({ game, onPress, isVoted = false, isSelected = false, rotateDeg = 0 }) {
     const rotate = useSharedValue(0)
     const scale = useSharedValue(1)
-
-    const handleAnimation = () => {
-        width.value = withSpring(width.value === '100%' && '90%')
-        height.value = withSpring(180)
-    }
-
-    const handleTranslate = () => {
-        translateY.value -= 5
-    }
 
     const handleScale = () => {
         scale.value = withSpring(0.9)
@@ -28,12 +16,8 @@ export function OptionCard({ game, onPress, isVoted = false, isSelected = false 
         transform: [{ scale: withSpring(scale.value) }],
     }))
 
-    const animatedTranslation = useAnimatedStyle(() => ({
-        transform: [{ translateY: withSpring(translateY.value * 2) }],
-    }))
-
     const handleRotation = () => {
-        rotate.value -= 5
+        rotate.value += rotateDeg
     }
 
     const animatedRotation = useAnimatedStyle(() => ({
@@ -42,7 +26,7 @@ export function OptionCard({ game, onPress, isVoted = false, isSelected = false 
 
     const handlePress = () => {
         if (!isVoted) {
-            handleScale()
+            handleRotation()
             onPress()
         }
     }
@@ -55,7 +39,7 @@ export function OptionCard({ game, onPress, isVoted = false, isSelected = false 
             <Animated.View
                 style={[
                     styles.viewContainer,
-                    animatedScale
+                    animatedRotation,
                 ]}
             >
                 <LinearGradient
@@ -69,12 +53,15 @@ export function OptionCard({ game, onPress, isVoted = false, isSelected = false 
                         {game.label}
                     </Animated.Text>
                     {isSelected && (
-                        <View style={styles.checkContainer}>
+                        <Animated.View
+                            style={styles.checkContainer}
+                            entering={BounceIn} exiting={BounceOut}
+                        >
                             <Image
                                 style={styles.checkImage}
                                 source={icon}
                             />
-                        </View>
+                        </Animated.View>
                     )}
                 </LinearGradient>
             </Animated.View>

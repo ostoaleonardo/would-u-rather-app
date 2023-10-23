@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import Animated, { BounceIn, BounceOut } from 'react-native-reanimated'
-import { View, StyleSheet, Pressable, Text } from 'react-native'
+import NetInfo from '@react-native-community/netinfo'
+import Animated, { BounceIn, BounceOut, SlideInDown, SlideOutDown } from 'react-native-reanimated'
+import { View, StyleSheet, Pressable, Text, Image } from 'react-native'
 import { useFetchQuestion } from '../hooks/useFetchQuestion'
 import { Background } from '../components/Background'
 import { classic } from '../constants/questions'
 
+const check = require('../../assets/icons/check_icon.png')
+const cross = require('../../assets/icons/cross_icon.png')
+
 export default function Play() {
-    const { getQuestionById, updateVotesById } = useFetchQuestion()
+    const { updateVotesById } = useFetchQuestion()
+    const { isConnected } = NetInfo.useNetInfo()
     const [question, setQuestion] = useState('')
     const [percentage, setPercentage] = useState(0)
     const [isSelected, setIsSelected] = useState(false)
+    const [optionVoted, setOptionVoted] = useState('')
     const table = 'classic'
 
     useEffect(() => {
@@ -25,12 +31,15 @@ export default function Play() {
         setPercentage(0)
         setIsSelected(false)
         const id = getRandomNumber()
-        const question = await getQuestionById(table, id)
-        setQuestion(question)
+        setQuestion(classic[id])
     }
 
     const updateVotes = async (option) => {
         setIsSelected(true)
+        setOptionVoted(option)
+
+        if (!isConnected) return
+
         option = option === 'option1' ? 'option1Votes' : 'option2Votes'
         const updatedQuestion = await updateVotesById(table, option, question.id)
         setQuestion(updatedQuestion)
@@ -49,38 +58,58 @@ export default function Play() {
         <View style={styles.container}>
             <Background />
             <View style={styles.menu}>
-                {isSelected && (
+                {/* {isSelected && (
                     <Animated.Text
                         style={styles.votes}
                         entering={BounceIn} exiting={BounceOut}
                     >
                         {question.option1Votes + ' votos'}
                     </Animated.Text>
-                )}
-                {percentage !== 0 && (
+                )} */}
+                {/* {percentage !== 0 && (
                     <Animated.Text
                         style={styles.title}
                         entering={BounceIn} exiting={BounceOut}
                     >
                         {percentage.toFixed(0) + '%'}
                     </Animated.Text>
-                )}
-                {!isSelected && (
-                    <Animated.Text
-                        style={styles.title}
+                )} */}
+                {isSelected && (
+                    <Animated.View
+                        style={styles.checkContainer}
                         entering={BounceIn} exiting={BounceOut}
                     >
-                        ¿Qué prefieres?
-                    </Animated.Text>
+                        {optionVoted === 'option1'
+                            ? <Image style={styles.iconImage} source={check} />
+                            : <Image style={styles.iconImage} source={cross} />
+                        }
+                    </Animated.View>
                 )}
+                <Animated.Text
+                    style={styles.title}
+                    entering={BounceIn} exiting={BounceOut}
+                >
+                    ¿Qué prefieres?
+                </Animated.Text>
                 {isSelected && (
+                    <Animated.View
+                        style={styles.checkContainer}
+                        entering={BounceIn} exiting={BounceOut}
+                    >
+                        {optionVoted === 'option2'
+                            ? <Image style={styles.iconImage} source={check} />
+                            : <Image style={styles.iconImage} source={cross} />
+                        }
+                    </Animated.View>
+                )}
+                {/* {isSelected && (
                     <Animated.Text
                         style={styles.votes}
                         entering={BounceIn} exiting={BounceOut}
                     >
                         {question.option2Votes + ' votos'}
                     </Animated.Text>
-                )}
+                )} */}
             </View>
             <View style={styles.options}>
                 <Pressable
@@ -108,14 +137,30 @@ export default function Play() {
                     </Animated.Text>
                 </Pressable>
             </View>
-            <Pressable
-                style={styles.buttonNext}
-                onPress={getQuestion}
-            >
-                <Text style={styles.buttonLabel}>
-                    {isSelected ? 'Siguiente' : 'Saltar pregunta'}
-                </Text>
-            </Pressable>
+            {isSelected && (
+                <Animated.View
+                    style={styles.buttonNext}
+                    entering={SlideInDown} exiting={SlideOutDown}
+                >
+                    <Pressable onPress={getQuestion}>
+                        <Text style={styles.buttonLabel}>
+                            Siguiente
+                        </Text>
+                    </Pressable>
+                </Animated.View>
+            )}
+            {!isSelected && (
+                <Animated.View
+                    style={styles.buttonSkip}
+                    entering={BounceIn} exiting={SlideOutDown}
+                >
+                    <Pressable onPress={getQuestion}>
+                        <Text style={styles.buttonLabel}>
+                            Saltar pregunta
+                        </Text>
+                    </Pressable>
+                </Animated.View>
+            )}
         </View>
     )
 }
@@ -172,16 +217,35 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontFamily: 'Rubik-Medium',
     },
-    buttonNext: {
+    buttonSkip: {
         position: 'absolute',
         bottom: 32,
-        borderRadius: 10,
         paddingVertical: 8,
         paddingHorizontal: 30,
     },
+    buttonNext: {
+        position: 'absolute',
+        bottom: 32,
+        borderRadius: 25,
+        paddingVertical: 12,
+        paddingHorizontal: 40,
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    },
     buttonLabel: {
         fontSize: 18,
-        color: 'rgba(255, 255, 255, 0.7)',
         fontFamily: 'Rubik-Medium',
-    }
+        color: 'rgba(255, 255, 255, 0.8)',
+    },
+    checkContainer: {
+        width: 35,
+        height: 35,
+        borderRadius: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    },
+    iconImage: {
+        width: 15,
+        height: 15,
+    },
 })

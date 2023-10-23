@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import NetInfo from '@react-native-community/netinfo'
 import { LinearGradient } from 'expo-linear-gradient'
 import { View, StyleSheet, Text } from 'react-native'
 import Animated, { FlipInEasyY, FlipOutEasyY } from 'react-native-reanimated'
@@ -8,6 +9,7 @@ import { classic } from '../constants/questions'
 
 export function RandomQuestion() {
     const { getQuestionById, updateVotesById } = useFetchQuestion()
+    const { isConnected } = NetInfo.useNetInfo()
     const [question, setQuestion] = useState('')
     const [percentage, setPercentage] = useState(0)
     const [isSelected, setIsSelected] = useState('')
@@ -23,12 +25,14 @@ export function RandomQuestion() {
 
     const getQuestion = async () => {
         const id = getRandomNumber()
-        const question = await getQuestionById(table, id)
-        setQuestion(question)
+        setQuestion(classic[id])
     }
 
     const updateVotes = async (option) => {
         setIsSelected(option)
+
+        if (!isConnected) return
+        
         option = option === 'option1' ? 'option1Votes' : 'option2Votes'
         const updatedQuestion = await updateVotesById(table, option, question.id)
         setQuestion(updatedQuestion)
@@ -58,6 +62,7 @@ export function RandomQuestion() {
                         label: question.option1,
                         gradiant: ['#ff3c3c', '#ff007a'],
                     }}
+                    rotateDeg={-5}
                     isVoted={isSelected}
                     isSelected={isSelected === 'option1'}
                     onPress={() => updateVotes('option1')}
@@ -67,28 +72,29 @@ export function RandomQuestion() {
                         label: question.option2,
                         gradiant: ['#677fff', '#3c4fff'],
                     }}
+                    rotateDeg={5}
                     isVoted={isSelected}
                     isSelected={isSelected === 'option2'}
                     onPress={() => updateVotes('option2')}
                 />
             </View>
             <View style={styles.percentageContainer}>
-                {percentage !== 0 && (
+                {/* {percentage !== 0 && isConnected && (
                     <Animated.Text
                         style={styles.percentage}
                         entering={FlipInEasyY} exiting={FlipOutEasyY}
                     >
                         {percentage.toFixed(0) + '%'}
                     </Animated.Text>
-                )}
-                {!isSelected && (
+                )} */}
+                {/* {!isSelected && ( */}
                     <Animated.Text
                         style={styles.percentage}
                         entering={FlipInEasyY} exiting={FlipOutEasyY}
                     >
                         o
                     </Animated.Text>
-                )}
+                {/* )} */}
             </View>
         </LinearGradient>
     )

@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
 import { RandomQuestion } from '../components/RandomQuestion'
 import { GameModes } from '../components/GameModes'
+import { PrivacyPolicy } from '../components/PrivacyPolicy'
 import { NoConnection } from '../components/NoConnection'
 import { SuggestionsModal } from '../components/SuggestionsModal'
 
@@ -23,6 +24,7 @@ export default function Home() {
             <ScrollView>
                 <RandomQuestion />
                 <GameModes handleModal={handleModal} />
+                <PrivacyPolicy />
             </ScrollView>
             {showModal && isConnected && <SuggestionsModal handleModal={handleModal} />}
             {showModal && !isConnected && <NoConnection handleModal={handleModal} />}

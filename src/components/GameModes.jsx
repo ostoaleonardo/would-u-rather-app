@@ -42,7 +42,6 @@ export function GameModes({ handleModal }) {
                     onPress={() => handleModal()}
                 />
             </View>
-            <Text style={styles.soon}>Proximamente mas...</Text>
         </View>
     )
 }
@@ -72,11 +71,5 @@ const styles = StyleSheet.create({
         gap: 12,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    soon: {
-        fontSize: 16,
-        marginTop: 30,
-        color: 'rgba(255, 255, 255, 0.5)',
-        fontFamily: 'Rubik-Medium',
     },
 })

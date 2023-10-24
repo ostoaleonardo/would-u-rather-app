@@ -36,7 +36,7 @@ export default function Layout() {
             onLayout={onLayoutRootView}
         >
             <Stack.Screen name='index' options={{ headerShown: false }} />
-            <Stack.Screen name='play' options={{ headerTitle: '', headerTintColor: '#fff', headerTransparent: true, }} />
+            <Stack.Screen name='game' options={{ headerTitle: '', headerTintColor: '#fff', headerTransparent: true, }} />
         </Stack>
     )
 }

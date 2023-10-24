@@ -1,7 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
+import { SuggestionsCard } from './SuggestionsCard'
 import { ModeCard } from './ModeCard'
 
-export function GameModes() {
+const classic = require('../../assets/icons/classic.png')
+const hard = require('../../assets/icons/hard.png')
+const suggestion = require('../../assets/icons/suggestion.png')
+
+export function GameModes({ handleModal }) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Modos de juego</Text>
@@ -11,27 +16,30 @@ export function GameModes() {
             <View style={styles.optionsContainer}>
                 <ModeCard
                     game={{
-                        href: '/play',
+                        icon: classic,
                         label: 'Clasico',
+                        href: '/game?mode=classic',
                         description: 'Colección de preguntas clásicas',
-                        gradiant: ['#0066ff', '#0085ff'],
+                        gradiant: ['#0066ff', '#677fff'],
                     }}
                 />
                 <ModeCard
                     game={{
-                        href: '/',
+                        icon: hard,
                         label: 'Dificil',
-                        description: 'Preguntas dificiles de elegir',
+                        href: '/game?mode=hard',
+                        description: 'Colección de preguntas dificiles',
                         gradiant: ['#7000ff', '#ee09e5'],
                     }}
                 />
-                <ModeCard
+                <SuggestionsCard
                     game={{
-                        href: '/',
-                        label: 'De fiesta',
-                        description: 'Preguntas para jugar con amigos',
-                        gradiant: ['#ff4646', '#ffb951'],
+                        icon: suggestion,
+                        label: 'Sugerencias',
+                        description: 'Envianos tu pregunta para agregarla al juego',
+                        gradiant: ['#ff3c3c', '#ff007a'],
                     }}
+                    onPress={() => handleModal()}
                 />
             </View>
             <Text style={styles.soon}>Proximamente mas...</Text>

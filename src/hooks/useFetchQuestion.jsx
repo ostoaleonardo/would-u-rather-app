@@ -44,6 +44,21 @@ export const useFetchQuestion = () => {
         return data[0]
     }
 
+    const sendSeggestion = async (option1, option2) => {
+        const { data, error } = await supabase
+            .from('suggestions')
+            .insert([
+                { option1: option1, option2: option2 },
+            ])
+            .select()
+
+        if (error) {
+            return error
+        }
+
+        return data
+    }
+
     const loadQuestions = async (table, questions) => {
         const { data, error } = await supabase
             .from(table)
@@ -61,6 +76,7 @@ export const useFetchQuestion = () => {
         getQuestionById,
         updateVotesById,
         getVotesById,
+        sendSeggestion,
         loadQuestions,
     }
 }

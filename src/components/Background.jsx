@@ -1,19 +1,30 @@
 import { StyleSheet } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 
-export function Background() {
+export function Background({ mode }) {
+    // set different background colors for each game mode
+    const backgroundVariants = {
+        classic: ['#ff3c3c', '#050a0e', '#3c4fff'],
+        hard: ['#ff008a', '#050a0e', '#7000ff'],
+    }
+
+    const cardsVariants = {
+        classic: ['#ff3c3c', '#ff007a', '#677fff', '#3c4fff'],
+        hard: ['#ff008a', '#eb00ff', '#677fff', '#7000ff'],
+    }
+
     return (
         <LinearGradient
             style={styles.gradiant}
-            colors={['#ff3c3c', '#050a0e', '#3c4fff']}
+            colors={backgroundVariants[mode]}
         >
             <LinearGradient
                 style={styles.backgroundRed}
-                colors={['#ff3c3c', '#ff007a']}
+                colors={cardsVariants[mode].slice(0, 2)}
             />
             <LinearGradient
                 style={styles.backgroundBlue}
-                colors={['#677fff', '#3c4fff']}
+                colors={cardsVariants[mode].slice(2, 4)}
             />
         </LinearGradient>
     )

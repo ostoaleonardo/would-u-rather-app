@@ -2,8 +2,6 @@ import { Link } from 'expo-router'
 import { View, StyleSheet, Text, Pressable, Image } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 
-const icon = require('../../assets/icons/classic.png')
-
 export function ModeCard({ game }) {
     return (
         <Link href={game.href} asChild>
@@ -17,7 +15,7 @@ export function ModeCard({ game }) {
                     <View style={styles.cardHeader}>
                         <Image
                             style={styles.cardHeaderImage}
-                            source={icon}
+                            source={game.icon}
                         />
                     </View>
                     <View style={styles.cardContent}>
@@ -55,7 +53,6 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
     },
     cardHeaderImage: {
         width: 70,

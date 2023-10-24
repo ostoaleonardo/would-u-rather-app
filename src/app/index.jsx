@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import NetInfo from '@react-native-community/netinfo'
 import { StyleSheet, StatusBar, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -6,19 +6,26 @@ import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
 import { RandomQuestion } from '../components/RandomQuestion'
 import { GameModes } from '../components/GameModes'
 import { NoConnection } from '../components/NoConnection'
+import { SuggestionsModal } from '../components/SuggestionsModal'
 
 const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-5454307717540089/2986547026'
 
 export default function Home() {
     const { isConnected } = NetInfo.useNetInfo()
+    const [showModal, setShowModal] = useState(false)
+
+    const handleModal = () => {
+        setShowModal(!showModal)
+    }
 
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <RandomQuestion />
-                <GameModes />
+                <GameModes handleModal={handleModal} />
             </ScrollView>
-            {isConnected !== null && !isConnected && <NoConnection />}
+            {showModal && isConnected && <SuggestionsModal handleModal={handleModal} />}
+            {showModal && !isConnected && <NoConnection handleModal={handleModal} />}
             <BannerAd
                 unitId={adUnitId}
                 size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}

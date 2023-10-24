@@ -1,29 +1,35 @@
 import React, { useEffect, useState } from 'react'
+import { useGlobalSearchParams } from 'expo-router'
 import NetInfo from '@react-native-community/netinfo'
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
 import Animated, { BounceIn, BounceOut, SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { View, StyleSheet, Pressable, Text, Image } from 'react-native'
-import { useFetchQuestion } from '../hooks/useFetchQuestion'
-import { Background } from '../components/Background'
-import { classic } from '../constants/questions'
+import { useFetchQuestion } from '../../hooks/useFetchQuestion'
+import { Background } from '../../components/Background'
+import { classic, hard } from '../../constants/questions'
 
-const check = require('../../assets/icons/check_icon.png')
-const cross = require('../../assets/icons/cross_icon.png')
+const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-5454307717540089/2986547026'
 
-export default function Play() {
+const check = require('../../../assets/icons/check_icon.png')
+const cross = require('../../../assets/icons/cross_icon.png')
+
+export default function Game() {
+    const params = useGlobalSearchParams()
+    const table = params.mode === 'classic' ? 'classic' : 'hard'
+    const length = table === 'classic' ? classic.length : hard.length
     const { updateVotesById } = useFetchQuestion()
     const { isConnected } = NetInfo.useNetInfo()
     const [question, setQuestion] = useState('')
     const [percentage, setPercentage] = useState(0)
     const [isSelected, setIsSelected] = useState(false)
     const [optionVoted, setOptionVoted] = useState('')
-    const table = 'classic'
 
     useEffect(() => {
         getQuestion()
     }, [])
 
     const getRandomNumber = () => {
-        return Math.floor(Math.random() * classic.length)
+        return Math.floor(Math.random() * length)
     }
 
     const getQuestion = async () => {
@@ -31,7 +37,8 @@ export default function Play() {
         setPercentage(0)
         setIsSelected(false)
         const id = getRandomNumber()
-        setQuestion(classic[id])
+        const question = table === 'classic' ? classic[id] : hard[id]
+        setQuestion(question)
     }
 
     const updateVotes = async (option) => {
@@ -55,8 +62,9 @@ export default function Play() {
     }
 
     return (
+        <>
         <View style={styles.container}>
-            <Background />
+            <Background mode={table} />
             <View style={styles.menu}>
                 {/* {isSelected && (
                     <Animated.Text
@@ -162,6 +170,14 @@ export default function Play() {
                 </Animated.View>
             )}
         </View>
+        <BannerAd
+                unitId={adUnitId}
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+                requestOptions={{
+                    requestNonPersonalizedAdsOnly: true,
+                }}
+            />
+        </>
     )
 }
 

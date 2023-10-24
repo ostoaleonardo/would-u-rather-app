@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import Animated, { BounceIn, BounceOut } from 'react-native-reanimated'
 
-export function NoConnection() {
+export function NoConnection({ handleModal }) {
     return (
         <View style={styles.container}>
             <Animated.View
@@ -20,9 +20,12 @@ export function NoConnection() {
                     <Text style={styles.subtitle}>
                         No tienes conexión a internet
                     </Text>
-                    <Pressable style={styles.button}>
+                    <Pressable
+                        style={styles.button}
+                        onPress={() => handleModal()}
+                    >
                         <Text style={styles.buttonLabel}>
-                            Reintentar
+                            Cerrar
                         </Text>
                     </Pressable>
                 </LinearGradient>

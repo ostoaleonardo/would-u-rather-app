@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
+import * as Updates from 'expo-updates'
 import 'expo-dev-client'
 
 export default function Layout() {
@@ -11,20 +12,37 @@ export default function Layout() {
     })
 
     useEffect(() => {
+        onFetchUpdateAsync()
+
         const loadFont = async () => {
             await SplashScreen.preventAutoHideAsync()
         }
-        
+
         loadFont()
     }, [])
-    
+
     const onLayoutRootView = useCallback(async () => {
         if (fontsLoaded || fontError) {
             await SplashScreen.hideAsync()
         }
     }, [fontsLoaded, fontError])
-    
-    if (!fontsLoaded) return null
+
+    if (!fontsLoaded) {
+        return null
+    }
+
+    async function onFetchUpdateAsync() {
+        try {
+            const update = await Updates.checkForUpdateAsync()
+
+            if (update.isAvailable) {
+                await Updates.fetchUpdateAsync()
+                await Updates.reloadAsync()
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <Stack

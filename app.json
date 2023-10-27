@@ -23,14 +23,21 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.ostoaleonardo.wurather"
+      "package": "com.ostoaleonardo.wurather",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/favicon.png",
       "bundle": "metro"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-updates",
+        {
+          "username": "ostoaleonardo"
+        }
+      ]
     ],
     "extra": {
       "router": {
@@ -39,6 +46,12 @@
       "eas": {
         "projectId": "67196a2b-c33d-4519-b5f5-64998a22be21"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/67196a2b-c33d-4519-b5f5-64998a22be21"
     }
   },
   "react-native-google-mobile-ads": {

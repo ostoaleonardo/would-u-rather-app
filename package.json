@@ -30,7 +30,8 @@
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.6",
     "expo-dev-client": "~2.4.11",
-    "@react-native-community/netinfo": "9.3.10"
+    "@react-native-community/netinfo": "9.3.10",
+    "expo-updates": "~0.18.17"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

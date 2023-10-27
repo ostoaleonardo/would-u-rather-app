@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Animated, { BounceIn, BounceOut } from 'react-native-reanimated'
+import Animated, { BounceIn, BounceOut, ZoomIn, ZoomOut } from 'react-native-reanimated'
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { useFetchQuestion } from '../hooks/useFetchQuestion'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -26,7 +26,7 @@ export function SuggestionsModal({ handleModal }) {
             {!isSent && (
                 <Animated.View
                     style={styles.modal}
-                    entering={BounceIn} exiting={BounceOut}
+                    entering={ZoomIn} exiting={ZoomOut}
                 >
                     <LinearGradient
                         style={styles.gradiant}

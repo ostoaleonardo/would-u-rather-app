@@ -8,14 +8,17 @@ export function PrivacyPolicy() {
 
     return (
         <View style={styles.container}>
-            <Pressable
-                onPress={handlePrivacyPolicy}
-                style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}
-            >
-                <Text style={styles.label}>
-                    Política de Privacidad
-                </Text>
-            </Pressable>
+            <View style={styles.viewButton}>
+                <Pressable
+                    onPress={handlePrivacyPolicy}
+                    style={({ pressed }) => [{ opacity: pressed ? 1 : 0.6 }, styles.button]}
+                    android_ripple={{ color: 'rgba(255, 255, 255, 0.3)', borderless: false }}
+                >
+                    <Text style={styles.label}>
+                        Política de Privacidad
+                    </Text>
+                </Pressable>
+            </View>
         </View>
     )
 }
@@ -24,15 +27,23 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: 'auto',
-        padding: 32,
         paddingTop: 0,
+        paddingBottom: 32,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'black',
+    },
+    viewButton: {
+        borderRadius: 25,
+        overflow: 'hidden',
+    },
+    button: {
+        borderRadius: 25,
+        paddingVertical: 12,
+        paddingHorizontal: 15,
     },
     label: {
         fontSize: 16,
-        color: 'rgba(255, 255, 255, 0.5)',
+        color: 'white',
         fontFamily: 'Rubik-Medium',
     },
 })

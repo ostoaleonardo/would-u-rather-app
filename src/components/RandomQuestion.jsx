@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     title: {
-        fontSize: 28,
+        fontSize: 32,
         color: 'white',
         fontFamily: 'Rubik-Bold',
     },

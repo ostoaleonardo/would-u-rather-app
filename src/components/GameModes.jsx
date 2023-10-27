@@ -36,7 +36,7 @@ export function GameModes({ handleModal }) {
                     game={{
                         icon: suggestion,
                         label: 'Sugerencias',
-                        description: 'Envianos tu pregunta para agregarla al juego',
+                        description: 'Envianos tu pregunta y la añadiremos',
                         gradiant: ['#ff3c3c', '#ff007a'],
                     }}
                     onPress={() => handleModal()}

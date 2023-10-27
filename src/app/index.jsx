@@ -2,14 +2,12 @@ import React, { useState } from 'react'
 import NetInfo from '@react-native-community/netinfo'
 import { StyleSheet, StatusBar, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
 import { RandomQuestion } from '../components/RandomQuestion'
 import { GameModes } from '../components/GameModes'
 import { PrivacyPolicy } from '../components/PrivacyPolicy'
-import { NoConnection } from '../components/NoConnection'
+import { NoConnectionModal } from '../components/NoConnectionModal'
 import { SuggestionsModal } from '../components/SuggestionsModal'
-
-const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-5454307717540089/2986547026'
+import { BannerAdMob } from '../components/BannerAdMob'
 
 export default function Home() {
     const { isConnected } = NetInfo.useNetInfo()
@@ -27,19 +25,13 @@ export default function Home() {
                 <PrivacyPolicy />
             </ScrollView>
             {showModal && isConnected && <SuggestionsModal handleModal={handleModal} />}
-            {showModal && !isConnected && <NoConnection handleModal={handleModal} />}
-            <BannerAd
-                unitId={adUnitId}
-                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-                requestOptions={{
-                    requestNonPersonalizedAdsOnly: true,
-                }}
-            />
+            {showModal && !isConnected && <NoConnectionModal handleModal={handleModal} />}
+            {isConnected && (
+                <BannerAdMob />
+            )}
             <StatusBar
+                hidden={true}
                 animated={true}
-                translucent={true}
-                backgroundColor='black'
-                barStyle='light-content'
             />
         </SafeAreaView>
     )
@@ -49,6 +41,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        backgroundColor: 'black',
     },
     menu: {
         position: 'absolute',

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "would-u-rather-app",
+    "name": "¿Qué prefieres?",
     "slug": "would-u-rather-app",
     "scheme": "would-u-rather-app",
     "version": "1.0.0",
@@ -23,7 +23,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.ostoaleonardo.woulduratherapp"
+      "package": "com.ostoaleonardo.wurather"
     },
     "web": {
       "favicon": "./assets/favicon.png",

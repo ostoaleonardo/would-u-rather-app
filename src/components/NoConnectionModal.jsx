@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import Animated, { BounceIn, BounceOut } from 'react-native-reanimated'
 
-export function NoConnection({ handleModal }) {
+export function NoConnectionModal({ handleModal }) {
     return (
         <View style={styles.container}>
             <Animated.View

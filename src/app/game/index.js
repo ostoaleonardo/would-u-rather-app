@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { useGlobalSearchParams } from 'expo-router'
 import NetInfo from '@react-native-community/netinfo'
-import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
+import { InterstitialAd, AdEventType, TestIds } from 'react-native-google-mobile-ads'
 import Animated, { BounceIn, BounceOut, SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { View, StyleSheet, Pressable, Text, Image } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { useFetchQuestion } from '../../hooks/useFetchQuestion'
 import { Background } from '../../components/Background'
 import { classic, hard } from '../../constants/questions'
+import { BannerAdMob } from '../../components/BannerAdMob'
 
-const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-5454307717540089/2986547026'
+const adIntId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-5454307717540089/1556881447'
+
+const interstitial = InterstitialAd.createForAdRequest(adIntId, {
+    requestNonPersonalizedAdsOnly: true,
+    keywords: ['fashion', 'clothing'],
+})
 
 const check = require('../../../assets/icons/check_icon.png')
 const cross = require('../../../assets/icons/cross_icon.png')
@@ -23,10 +30,35 @@ export default function Game() {
     const [percentage, setPercentage] = useState(0)
     const [isSelected, setIsSelected] = useState(false)
     const [optionVoted, setOptionVoted] = useState('')
+    const [loaded, setLoaded] = useState(true)
+    const [questionCount, setQuestionCount] = useState(1)
 
     useEffect(() => {
         getQuestion()
     }, [])
+
+    useEffect(() => {
+        const unsubscribe = loadInterstitial()
+        return unsubscribe
+    }, [])
+
+    const loadInterstitial = () => {
+        const unsubscribeLoaded = interstitial.addAdEventListener(AdEventType.LOADED, () => {
+            setLoaded(true)
+        })
+
+        const unsubscribeClosed = interstitial.addAdEventListener(AdEventType.CLOSED, () => {
+            setLoaded(false)
+            interstitial.load()
+        })
+
+        interstitial.load()
+
+        return () => {
+            unsubscribeLoaded()
+            unsubscribeClosed()
+        }
+    }
 
     const getRandomNumber = () => {
         return Math.floor(Math.random() * length)
@@ -36,6 +68,15 @@ export default function Game() {
         setQuestion('')
         setPercentage(0)
         setIsSelected(false)
+        setQuestionCount(questionCount + 1)
+
+        if (questionCount % 10 === 0) {
+            if (loaded && isConnected) {
+                interstitial.show()
+                setQuestionCount(1)
+            }
+        }
+
         const id = getRandomNumber()
         const question = table === 'classic' ? classic[id] : hard[id]
         setQuestion(question)
@@ -62,11 +103,11 @@ export default function Game() {
     }
 
     return (
-        <>
-        <View style={styles.container}>
-            <Background mode={table} />
-            <View style={styles.menu}>
-                {/* {isSelected && (
+        <SafeAreaView style={styles.container}>
+            <View style={styles.game}>
+                <Background mode={table} />
+                <View style={styles.menu}>
+                    {/* {isSelected && (
                     <Animated.Text
                         style={styles.votes}
                         entering={BounceIn} exiting={BounceOut}
@@ -74,7 +115,7 @@ export default function Game() {
                         {question.option1Votes + ' votos'}
                     </Animated.Text>
                 )} */}
-                {/* {percentage !== 0 && (
+                    {/* {percentage !== 0 && (
                     <Animated.Text
                         style={styles.title}
                         entering={BounceIn} exiting={BounceOut}
@@ -82,35 +123,35 @@ export default function Game() {
                         {percentage.toFixed(0) + '%'}
                     </Animated.Text>
                 )} */}
-                {isSelected && (
-                    <Animated.View
-                        style={styles.checkContainer}
+                    {isSelected && (
+                        <Animated.View
+                            style={styles.checkContainer}
+                            entering={BounceIn} exiting={BounceOut}
+                        >
+                            {optionVoted === 'option1'
+                                ? <Image style={styles.iconImage} source={check} />
+                                : <Image style={styles.iconImage} source={cross} />
+                            }
+                        </Animated.View>
+                    )}
+                    <Animated.Text
+                        style={styles.title}
                         entering={BounceIn} exiting={BounceOut}
                     >
-                        {optionVoted === 'option1'
-                            ? <Image style={styles.iconImage} source={check} />
-                            : <Image style={styles.iconImage} source={cross} />
-                        }
-                    </Animated.View>
-                )}
-                <Animated.Text
-                    style={styles.title}
-                    entering={BounceIn} exiting={BounceOut}
-                >
-                    ¿Qué prefieres?
-                </Animated.Text>
-                {isSelected && (
-                    <Animated.View
-                        style={styles.checkContainer}
-                        entering={BounceIn} exiting={BounceOut}
-                    >
-                        {optionVoted === 'option2'
-                            ? <Image style={styles.iconImage} source={check} />
-                            : <Image style={styles.iconImage} source={cross} />
-                        }
-                    </Animated.View>
-                )}
-                {/* {isSelected && (
+                        ¿Qué prefieres?
+                    </Animated.Text>
+                    {isSelected && (
+                        <Animated.View
+                            style={styles.checkContainer}
+                            entering={BounceIn} exiting={BounceOut}
+                        >
+                            {optionVoted === 'option2'
+                                ? <Image style={styles.iconImage} source={check} />
+                                : <Image style={styles.iconImage} source={cross} />
+                            }
+                        </Animated.View>
+                    )}
+                    {/* {isSelected && (
                     <Animated.Text
                         style={styles.votes}
                         entering={BounceIn} exiting={BounceOut}
@@ -118,72 +159,81 @@ export default function Game() {
                         {question.option2Votes + ' votos'}
                     </Animated.Text>
                 )} */}
-            </View>
-            <View style={styles.options}>
-                <Pressable
-                    style={styles.option}
-                    onPress={() => updateVotes('option1')}
-                    disabled={isSelected}
-                >
-                    <Animated.Text
-                        style={styles.optionLabel}
-                        entering={BounceIn} exiting={BounceOut}
+                </View>
+                <View style={styles.options}>
+                    <Pressable
+                        style={styles.option}
+                        onPress={() => updateVotes('option1')}
+                        disabled={isSelected}
                     >
-                        {question.option1}
-                    </Animated.Text>
-                </Pressable>
-                <Pressable
-                    style={styles.option}
-                    onPress={() => updateVotes('option2')}
-                    disabled={isSelected}
-                >
-                    <Animated.Text
-                        style={styles.optionLabel}
-                        entering={BounceIn} exiting={BounceOut}
+                        <Animated.Text
+                            style={styles.optionLabel}
+                            entering={BounceIn} exiting={BounceOut}
+                        >
+                            {question.option1}
+                        </Animated.Text>
+                    </Pressable>
+                    <Pressable
+                        style={styles.option}
+                        onPress={() => updateVotes('option2')}
+                        disabled={isSelected}
                     >
-                        {question.option2}
-                    </Animated.Text>
-                </Pressable>
+                        <Animated.Text
+                            style={styles.optionLabel}
+                            entering={BounceIn} exiting={BounceOut}
+                        >
+                            {question.option2}
+                        </Animated.Text>
+                    </Pressable>
+                </View>
+                {isSelected && (
+                    <Animated.View
+                        style={styles.viewButton}
+                        entering={SlideInDown} exiting={SlideOutDown}
+                    >
+                        <Pressable
+                            onPress={getQuestion}
+                            style={({ pressed }) => [{ opacity: pressed ? 1 : 0.8 }, styles.buttonNext]}
+                            android_ripple={{ color: 'rgba(255, 255, 255, 0.3)', borderless: true }}
+                        >
+                            <Text style={styles.buttonLabel}>
+                                Siguiente
+                            </Text>
+                        </Pressable>
+                    </Animated.View>
+                )}
+                {!isSelected && (
+                    <Animated.View
+                        style={styles.viewButton}
+                        entering={BounceIn} exiting={SlideOutDown}
+                    >
+                        <Pressable
+                            onPress={getQuestion}
+                            style={({ pressed }) => [{ opacity: pressed ? 1 : 0.8 }, styles.buttonSkip]}
+                        >
+                            <Text style={styles.buttonLabel}>
+                                Saltar pregunta
+                            </Text>
+                        </Pressable>
+                    </Animated.View>
+                )}
             </View>
-            {isSelected && (
-                <Animated.View
-                    style={styles.buttonNext}
-                    entering={SlideInDown} exiting={SlideOutDown}
-                >
-                    <Pressable onPress={getQuestion}>
-                        <Text style={styles.buttonLabel}>
-                            Siguiente
-                        </Text>
-                    </Pressable>
-                </Animated.View>
+            {isConnected && (
+                <BannerAdMob />
             )}
-            {!isSelected && (
-                <Animated.View
-                    style={styles.buttonSkip}
-                    entering={BounceIn} exiting={SlideOutDown}
-                >
-                    <Pressable onPress={getQuestion}>
-                        <Text style={styles.buttonLabel}>
-                            Saltar pregunta
-                        </Text>
-                    </Pressable>
-                </Animated.View>
-            )}
-        </View>
-        <BannerAd
-                unitId={adUnitId}
-                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-                requestOptions={{
-                    requestNonPersonalizedAdsOnly: true,
-                }}
-            />
-        </>
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignItems: 'center',
+        backgroundColor: 'black',
+    },
+    game: {
+        flex: 1,
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -218,7 +268,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         textAlign: 'center',
         fontFamily: 'Rubik-Bold',
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
     },
     option: {
         flex: 1,
@@ -231,17 +280,23 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'white',
         textAlign: 'center',
+        paddingVertical: 20,
+        paddingHorizontal: 30,
         fontFamily: 'Rubik-Medium',
     },
-    buttonSkip: {
+    viewButton: {
         position: 'absolute',
         bottom: 32,
-        paddingVertical: 8,
-        paddingHorizontal: 30,
+        borderRadius: 25,
+        overflow: 'hidden',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    buttonSkip: {
+        paddingVertical: 12,
+        paddingHorizontal: 15,
     },
     buttonNext: {
-        position: 'absolute',
-        bottom: 32,
         borderRadius: 25,
         paddingVertical: 12,
         paddingHorizontal: 40,
@@ -249,8 +304,8 @@ const styles = StyleSheet.create({
     },
     buttonLabel: {
         fontSize: 18,
+        color: 'white',
         fontFamily: 'Rubik-Medium',
-        color: 'rgba(255, 255, 255, 0.8)',
     },
     checkContainer: {
         width: 35,

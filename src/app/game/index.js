@@ -27,6 +27,7 @@ export default function Game() {
     const { updateVotesById } = useFetchQuestion()
     const { isConnected } = NetInfo.useNetInfo()
     const [question, setQuestion] = useState('')
+    const [votes, setVotes] = useState('')
     const [percentage, setPercentage] = useState(0)
     const [isSelected, setIsSelected] = useState(false)
     const [optionVoted, setOptionVoted] = useState('')
@@ -70,6 +71,10 @@ export default function Game() {
         setIsSelected(false)
         setQuestionCount(questionCount + 1)
 
+        const id = getRandomNumber()
+        const question = table === 'classic' ? classic[id] : hard[id]
+        setQuestion(question)
+
         if (questionCount % 10 === 0) {
             if (loaded && isConnected) {
                 interstitial.show()
@@ -77,28 +82,25 @@ export default function Game() {
             }
         }
 
-        const id = getRandomNumber()
-        const question = table === 'classic' ? classic[id] : hard[id]
-        setQuestion(question)
     }
 
     const updateVotes = async (option) => {
         setIsSelected(true)
         setOptionVoted(option)
 
-        if (!isConnected) return
+        if (!isConnected) { return }
 
         option = option === 'option1' ? 'option1Votes' : 'option2Votes'
-        const updatedQuestion = await updateVotesById(table, option, question.id)
-        setQuestion(updatedQuestion)
-        calculatePercentage(updatedQuestion, option)
+        const votes = await updateVotesById(table, option, question.id)
+        setVotes(votes)
+        calculatePercentage(votes, option)
     }
 
-    const calculatePercentage = (question, option) => {
-        const total = question.option1Votes + question.option2Votes
+    const calculatePercentage = (votes, option) => {
+        const total = votes.option1Votes + votes.option2Votes
         const percentage = option === 'option1Votes'
-            ? (question.option1Votes / total) * 100
-            : (question.option2Votes / total) * 100
+            ? (votes.option1Votes / total) * 100
+            : (votes.option2Votes / total) * 100
         setPercentage(percentage)
     }
 
@@ -112,7 +114,7 @@ export default function Game() {
                         style={styles.votes}
                         entering={BounceIn} exiting={BounceOut}
                     >
-                        {question.option1Votes + ' votos'}
+                        {votes.option1Votes + ' votos'}
                     </Animated.Text>
                 )} */}
                     {/* {percentage !== 0 && (
@@ -156,7 +158,7 @@ export default function Game() {
                         style={styles.votes}
                         entering={BounceIn} exiting={BounceOut}
                     >
-                        {question.option2Votes + ' votos'}
+                        {votes.option2Votes + ' votos'}
                     </Animated.Text>
                 )} */}
                 </View>

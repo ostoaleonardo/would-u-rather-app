@@ -28,14 +28,14 @@ export const useFetchQuestion = () => {
         return data[0]
     }
 
-    const updateVotesById = async (table, option, id ) => {
+    const updateVotesById = async (table, option, id) => {
         const votes = await getVotesById(table, option, id)
 
         const { data, error } = await supabase
             .from(table)
             .update({ [option]: votes[option] + 1 })
             .eq('id', id)
-            .select()
+            .select('option1Votes, option2Votes')
 
         if (error) {
             return null

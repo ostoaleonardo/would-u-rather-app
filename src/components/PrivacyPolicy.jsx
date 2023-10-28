@@ -15,7 +15,7 @@ export function PrivacyPolicy() {
                     android_ripple={{ color: 'rgba(255, 255, 255, 0.3)', borderless: false }}
                 >
                     <Text style={styles.label}>
-                        Testing Expo Updates
+                        Política de privacidad
                     </Text>
                 </Pressable>
             </View>

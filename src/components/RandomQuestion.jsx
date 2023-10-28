@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import NetInfo from '@react-native-community/netinfo'
+import { useFetchQuestion } from '../hooks/useFetchQuestion'
 import { LinearGradient } from 'expo-linear-gradient'
 import { View, StyleSheet, Text } from 'react-native'
 import Animated, { FlipInEasyY, FlipOutEasyY } from 'react-native-reanimated'
-import { useFetchQuestion } from '../hooks/useFetchQuestion'
 import { OptionCard } from './OptionCard'
 import { classic } from '../constants/questions'
 
 export function RandomQuestion() {
-    const { getQuestionById, updateVotesById } = useFetchQuestion()
+    const { updateVotesById } = useFetchQuestion()
     const { isConnected } = NetInfo.useNetInfo()
     const [question, setQuestion] = useState('')
     const [percentage, setPercentage] = useState(0)
@@ -31,19 +31,18 @@ export function RandomQuestion() {
     const updateVotes = async (option) => {
         setIsSelected(option)
 
-        if (!isConnected) return
-        
+        if (!isConnected) { return }
+
         option = option === 'option1' ? 'option1Votes' : 'option2Votes'
-        const updatedQuestion = await updateVotesById(table, option, question.id)
-        setQuestion(updatedQuestion)
-        calculatePercentage(updatedQuestion, option)
+        const votes = await updateVotesById(table, option, question.id)
+        calculatePercentage(votes, option)
     }
 
-    const calculatePercentage = (question, option) => {
-        const total = question.option1Votes + question.option2Votes
+    const calculatePercentage = (votes, option) => {
+        const total = votes.option1Votes + votes.option2Votes
         const percentage = option === 'option1Votes'
-            ? (question.option1Votes / total) * 100
-            : (question.option2Votes / total) * 100
+            ? (votes.option1Votes / total) * 100
+            : (votes.option2Votes / total) * 100
         setPercentage(percentage)
     }
 
@@ -88,12 +87,12 @@ export function RandomQuestion() {
                     </Animated.Text>
                 )} */}
                 {/* {!isSelected && ( */}
-                    <Animated.Text
-                        style={styles.percentage}
-                        entering={FlipInEasyY} exiting={FlipOutEasyY}
-                    >
-                        o
-                    </Animated.Text>
+                <Animated.Text
+                    style={styles.percentage}
+                    entering={FlipInEasyY} exiting={FlipOutEasyY}
+                >
+                    o
+                </Animated.Text>
                 {/* )} */}
             </View>
         </LinearGradient>

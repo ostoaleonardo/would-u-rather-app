@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useGlobalSearchParams } from 'expo-router'
 import NetInfo from '@react-native-community/netinfo'
+import { useFetchQuestion } from '../../hooks/useFetchQuestion'
 import { InterstitialAd, AdEventType, TestIds } from 'react-native-google-mobile-ads'
-import Animated, { BounceIn, BounceOut, SlideInDown, SlideOutDown } from 'react-native-reanimated'
+import Animated, { BounceIn, BounceOut, FadeOut, SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { View, StyleSheet, Pressable, Text, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useFetchQuestion } from '../../hooks/useFetchQuestion'
 import { Background } from '../../components/Background'
-import { classic, hard } from '../../constants/questions'
 import { BannerAdMob } from '../../components/BannerAdMob'
+import { classic, hard } from '../../constants/questions'
 
 const adIntId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-5454307717540089/1556881447'
 
 const interstitial = InterstitialAd.createForAdRequest(adIntId, {
     requestNonPersonalizedAdsOnly: true,
-    keywords: ['fashion', 'clothing'],
 })
 
 const check = require('../../../assets/icons/check_icon.png')
@@ -61,27 +60,29 @@ export default function Game() {
         }
     }
 
-    const getRandomNumber = () => {
-        return Math.floor(Math.random() * length)
-    }
-
-    const getQuestion = async () => {
-        setQuestion('')
-        setPercentage(0)
-        setIsSelected(false)
-        setQuestionCount(questionCount + 1)
-
-        const id = getRandomNumber()
-        const question = table === 'classic' ? classic[id] : hard[id]
-        setQuestion(question)
-
+    const showInterstitial = () => {
         if (questionCount % 10 === 0) {
             if (loaded && isConnected) {
                 interstitial.show()
                 setQuestionCount(1)
             }
         }
+    }
 
+    const getRandomNumber = () => {
+        return Math.floor(Math.random() * length)
+    }
+
+    const getQuestion = async () => {
+        await setQuestion({ option1: '', option2: '' })
+        setPercentage(0)
+        setIsSelected(false)
+        setQuestionCount(questionCount + 1)
+        showInterstitial()
+
+        const id = getRandomNumber()
+        const question = table === 'classic' ? classic[id] : hard[id]
+        setQuestion(question)
     }
 
     const updateVotes = async (option) => {
@@ -168,24 +169,28 @@ export default function Game() {
                         onPress={() => updateVotes('option1')}
                         disabled={isSelected}
                     >
-                        <Animated.Text
-                            style={styles.optionLabel}
-                            entering={BounceIn} exiting={BounceOut}
-                        >
-                            {question.option1}
-                        </Animated.Text>
+                        {question.option1 !== '' && (
+                            <Animated.Text
+                                style={styles.optionLabel}
+                                entering={BounceIn} exiting={FadeOut}
+                            >
+                                {question.option1}
+                            </Animated.Text>
+                        )}
                     </Pressable>
                     <Pressable
                         style={styles.option}
                         onPress={() => updateVotes('option2')}
                         disabled={isSelected}
                     >
-                        <Animated.Text
-                            style={styles.optionLabel}
-                            entering={BounceIn} exiting={BounceOut}
-                        >
-                            {question.option2}
-                        </Animated.Text>
+                        {question.option2 !== '' && (
+                            <Animated.Text
+                                style={styles.optionLabel}
+                                entering={BounceIn} exiting={FadeOut}
+                            >
+                                {question.option2}
+                            </Animated.Text>
+                        )}
                     </Pressable>
                 </View>
                 {isSelected && (

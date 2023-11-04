@@ -6,15 +6,6 @@ const icon = require('../../assets/icons/check_icon.png')
 
 export function OptionCard({ game, onPress, isVoted = false, isSelected = false, rotateDeg = 0 }) {
     const rotate = useSharedValue(0)
-    const scale = useSharedValue(1)
-
-    const handleScale = () => {
-        scale.value = withSpring(0.9)
-    }
-
-    const animatedScale = useAnimatedStyle(() => ({
-        transform: [{ scale: withSpring(scale.value) }],
-    }))
 
     const handleRotation = () => {
         rotate.value += rotateDeg
@@ -38,61 +29,104 @@ export function OptionCard({ game, onPress, isVoted = false, isSelected = false,
         >
             <Animated.View
                 style={[
-                    styles.viewContainer,
+                    styles.container,
                     animatedRotation,
                 ]}
             >
-                <LinearGradient
-                    style={styles.gradiant}
-                    colors={[game.gradiant[0], game.gradiant[1]]}
-                >
-                    <Animated.Text
-                        style={styles.option}
-                        entering={BounceIn} exiting={BounceOut}
+                <View style={rotateDeg > 0 ? styles.shadowRight : styles.shadowLeft} />
+                <View style={rotateDeg > 0 ? styles.viewRight : styles.viewLeft}>
+                    <LinearGradient
+                        style={styles.gradiant}
+                        colors={[game.gradiant[0], game.gradiant[1]]}
                     >
-                        {game.label}
-                    </Animated.Text>
-                    {isSelected && (
-                        <Animated.View
-                            style={styles.checkContainer}
+                        <Animated.Text
+                            style={styles.option}
                             entering={BounceIn} exiting={BounceOut}
                         >
-                            <Image
-                                style={styles.checkImage}
-                                source={icon}
-                            />
-                        </Animated.View>
-                    )}
-                </LinearGradient>
+                            {game.label}
+                        </Animated.Text>
+                        {isSelected && (
+                            <Animated.View
+                                style={styles.checkContainer}
+                                entering={BounceIn} exiting={BounceOut}
+                            >
+                                <Image
+                                    style={styles.checkImage}
+                                    source={icon}
+                                />
+                            </Animated.View>
+                        )}
+                    </LinearGradient>
+                </View>
             </Animated.View>
         </Pressable>
     )
 }
 
 const styles = StyleSheet.create({
-    viewContainer: {
-        width: '100%',
-        height: 200,
-    },
     pressContainer: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    gradiant: {
-        flex: 1,
         width: '100%',
         height: 200,
-        borderRadius: 28,
+        position: 'relative',
+    },
+    container: {
+        width: '100%',
+        height: '100%',
+    },
+    shadowLeft: {
+        position: 'absolute',
+        zIndex: 1,
+        bottom: 0,
+        left: 0,
+        width: '96%',
+        height: '96%',
+        borderRadius: 24,
+        backgroundColor: 'black',
+    },
+    shadowRight: {
+        position: 'absolute',
+        zIndex: 1,
+        bottom: 0,
+        right: 0,
+        width: '96%',
+        height: '96%',
+        borderRadius: 24,
+        backgroundColor: 'black',
+    },
+    viewLeft: {
+        position: 'absolute',
+        zIndex: 2,
+        top: 0,
+        right: 0,
+        width: '96%',
+        height: '96%',
+        borderWidth: 8,
+        borderRadius: 24,
+        borderColor: 'black',
+    },
+    viewRight: {
+        position: 'absolute',
+        zIndex: 2,
+        top: 0,
+        left: 0,
+        width: '96%',
+        height: '96%',
+        borderWidth: 8,
+        borderRadius: 24,
+        borderColor: 'black',
+    },
+    gradiant: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 16,
         alignItems: 'center',
-        flexDirection: 'row',
-        paddingHorizontal: 32,
+        paddingHorizontal: 20,
         justifyContent: 'center',
-        // transform: [{ rotate: '-10deg' },],
     },
     option: {
         fontSize: 12,
-        color: '#fff',
+        color: 'white',
         textAlign: 'center',
         fontFamily: 'Rubik-Medium',
     },

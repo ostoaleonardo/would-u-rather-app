@@ -54,22 +54,21 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'black',
+        backgroundColor: 'white',
     },
     title: {
         fontSize: 28,
-        color: 'white',
+        color: 'black',
         fontFamily: 'Rubik-Bold',
     },
     description: {
         fontSize: 16,
-        color: 'white',
+        color: 'black',
         marginBottom: 30,
         fontFamily: 'Rubik-Medium',
     },
     optionsContainer: {
-        gap: 12,
-        alignItems: 'center',
-        justifyContent: 'center',
+        gap: 10,
+        width: '100%',
     },
 })

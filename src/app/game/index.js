@@ -7,6 +7,7 @@ import Animated, { BounceIn, BounceOut, FadeOut, SlideInDown, SlideOutDown } fro
 import { View, StyleSheet, Pressable, Text, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Background } from '../../components/Background'
+import { SolidButton } from '../../components/SolidButton'
 import { BannerAdMob } from '../../components/BannerAdMob'
 import { classic, hard } from '../../constants/questions'
 
@@ -109,7 +110,7 @@ export default function Game() {
         <SafeAreaView style={styles.container}>
             <View style={styles.game}>
                 <Background mode={table} />
-                <View style={styles.menu}>
+                <View style={styles.labels}>
                     {/* {isSelected && (
                     <Animated.Text
                         style={styles.votes}
@@ -137,12 +138,17 @@ export default function Game() {
                             }
                         </Animated.View>
                     )}
-                    <Animated.Text
-                        style={styles.title}
+                    <Animated.View
+                        style={styles.cardContainer}
                         entering={BounceIn} exiting={BounceOut}
                     >
-                        ¿Qué prefieres?
-                    </Animated.Text>
+                        <View style={styles.shadow} />
+                        <View style={styles.titleContainer}>
+                            <Text style={styles.title}>
+                                ¿Qué prefieres?
+                            </Text>
+                        </View>
+                    </Animated.View>
                     {isSelected && (
                         <Animated.View
                             style={styles.checkContainer}
@@ -198,15 +204,7 @@ export default function Game() {
                         style={styles.viewButton}
                         entering={SlideInDown} exiting={SlideOutDown}
                     >
-                        <Pressable
-                            onPress={getQuestion}
-                            style={({ pressed }) => [{ opacity: pressed ? 1 : 0.8 }, styles.buttonNext]}
-                            android_ripple={{ color: 'rgba(255, 255, 255, 0.3)', borderless: true }}
-                        >
-                            <Text style={styles.buttonLabel}>
-                                Siguiente
-                            </Text>
-                        </Pressable>
+                        <SolidButton onPress={getQuestion} label='Siguiente' />
                     </Animated.View>
                 )}
                 {!isSelected && (
@@ -225,9 +223,7 @@ export default function Game() {
                     </Animated.View>
                 )}
             </View>
-            {isConnected && (
-                <BannerAdMob />
-            )}
+            {/* {isConnected && <BannerAdMob />} */}
         </SafeAreaView>
     )
 }
@@ -241,30 +237,50 @@ const styles = StyleSheet.create({
     game: {
         flex: 1,
         width: '100%',
+        height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    menu: {
+    labels: {
         position: 'absolute',
         gap: 12,
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
     },
-    options: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
+    cardContainer: {
+        position: 'relative',
+        width: '60%',
+        height: 80,
+        marginHorizontal: 32,
+    },
+    shadow: {
         position: 'absolute',
+        zIndex: 1,
+        bottom: 0,
+        left: 0,
+        width: '96%',
+        height: '94%',
+        borderRadius: 16,
+        backgroundColor: 'black',
+    },
+    titleContainer: {
+        position: 'absolute',
+        zIndex: 2,
+        top: 0,
+        right: 0,
+        width: '98%',
+        height: '92%',
+        borderWidth: 8,
+        borderRadius: 18,
+        borderColor: 'black',
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: 'white',
     },
     title: {
-        zIndex: 50,
-        padding: 24,
         fontSize: 24,
-        borderRadius: 24,
-        backgroundColor: '#fff',
+        color: 'black',
+        textAlign: 'center',
         fontFamily: 'Rubik-Bold',
     },
     votes: {
@@ -275,6 +291,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         textAlign: 'center',
         fontFamily: 'Rubik-Bold',
+    },
+    options: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     option: {
         flex: 1,
@@ -294,7 +318,6 @@ const styles = StyleSheet.create({
     viewButton: {
         position: 'absolute',
         bottom: 32,
-        borderRadius: 25,
         overflow: 'hidden',
         alignItems: 'center',
         justifyContent: 'center',
@@ -302,12 +325,6 @@ const styles = StyleSheet.create({
     buttonSkip: {
         paddingVertical: 12,
         paddingHorizontal: 15,
-    },
-    buttonNext: {
-        borderRadius: 25,
-        paddingVertical: 12,
-        paddingHorizontal: 40,
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
     },
     buttonLabel: {
         fontSize: 18,
@@ -320,7 +337,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+        backgroundColor: 'black',
     },
     iconImage: {
         width: 15,

@@ -19,19 +19,18 @@ export default function Home() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView>
+            <ScrollView style={styles.scrollView}>
                 <RandomQuestion />
                 <GameModes handleModal={handleModal} />
                 <PrivacyPolicy />
             </ScrollView>
             {showModal && isConnected && <SuggestionsModal handleModal={handleModal} />}
             {showModal && !isConnected && <NoConnectionModal handleModal={handleModal} />}
-            {isConnected && (
-                <BannerAdMob />
-            )}
+            {isConnected && <BannerAdMob />}
             <StatusBar
                 hidden={true}
                 animated={true}
+                barStyle='dark-content'
             />
         </SafeAreaView>
     )
@@ -41,29 +40,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: 'black',
+        backgroundColor: 'white',
     },
-    menu: {
-        position: 'absolute',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: 28,
-        color: '#fff',
-        fontFamily: 'Rubik-Bold',
-        marginBottom: 20,
-    },
-    buttonContainer: {
-        borderRadius: 20,
-        marginVertical: 5,
-        paddingVertical: 20,
-        paddingHorizontal: 20,
-        backgroundColor: 'black',
-    },
-    buttonLabel: {
-        fontSize: 16,
-        fontFamily: 'Rubik-Medium',
-        color: 'white',
+    scrollView: {
+        width: '100%',
+        height: '100%',
     },
 })

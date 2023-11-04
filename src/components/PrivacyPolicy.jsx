@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 16,
-        color: 'white',
+        color: 'black',
         fontFamily: 'Rubik-Medium',
     },
 })

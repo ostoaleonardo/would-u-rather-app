@@ -1,7 +1,7 @@
-import { Pressable, Text, View } from 'react-native'
-import { StyleSheet } from 'react-native'
+import { Pressable, Text, View } from "react-native"
+import { StyleSheet } from "react-native"
 
-export function SolidButton({ label, onPress }) {
+export function OutlineButton({ label, onPress }) {
     return (
         <Pressable
             onPress={onPress}
@@ -52,11 +52,11 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#141414',
+        backgroundColor: 'white',
     },
     label: {
         fontSize: 18,
-        color: 'white',
+        color: 'black',
         fontFamily: 'Rubik-Medium',
     },
 })

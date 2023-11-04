@@ -223,7 +223,7 @@ export default function Game() {
                     </Animated.View>
                 )}
             </View>
-            {/* {isConnected && <BannerAdMob />} */}
+            {isConnected && <BannerAdMob />}
         </SafeAreaView>
     )
 }
@@ -317,6 +317,7 @@ const styles = StyleSheet.create({
     },
     viewButton: {
         position: 'absolute',
+        width: '50%',
         bottom: 32,
         overflow: 'hidden',
         alignItems: 'center',

@@ -11,7 +11,7 @@ export function PrivacyPolicy() {
             <View style={styles.viewButton}>
                 <Pressable
                     onPress={handlePrivacyPolicy}
-                    style={({ pressed }) => [{ opacity: pressed ? 1 : 0.6 }, styles.button]}
+                    style={({ pressed }) => [{ opacity: pressed ? 1 : 0.7 }, styles.button]}
                     android_ripple={{ color: 'rgba(255, 255, 255, 0.3)', borderless: false }}
                 >
                     <Text style={styles.label}>

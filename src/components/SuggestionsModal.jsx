@@ -3,6 +3,8 @@ import Animated, { BounceIn, BounceOut, ZoomIn, ZoomOut } from 'react-native-rea
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { useFetchQuestion } from '../hooks/useFetchQuestion'
 import { LinearGradient } from 'expo-linear-gradient'
+import { SolidButton } from './SolidButton'
+import { OutlineButton } from './OutilineButton'
 
 export function SuggestionsModal({ handleModal }) {
     const { sendSeggestion } = useFetchQuestion()
@@ -25,50 +27,41 @@ export function SuggestionsModal({ handleModal }) {
         <View style={styles.container}>
             {!isSent && (
                 <Animated.View
-                    style={styles.modal}
+                    style={styles.modalContainer}
                     entering={ZoomIn} exiting={ZoomOut}
                 >
-                    <LinearGradient
-                        style={styles.gradiant}
-                        colors={['#ff3c3c', '#ff007a']}
-                    >
-                        <Text style={styles.title}>¿Qué prefieres?</Text>
-                        <Text style={styles.subtitle}>Envianos tu pregunta y la añadiremos al juego</Text>
-                        <Text style={styles.label}>Opción 1:</Text>
-                        <TextInput
-                            label='Opción 1'
-                            value={option1}
-                            style={styles.input}
-                            onChangeText={setOption1}
-                            placeholder='Ser rico'
-                            placeholderTextColor='rgba(255, 255, 255, 0.7)'
-                        />
-                        <Text style={styles.label}>Opción 2:</Text>
-                        <TextInput
-                            label='Opción 1'
-                            value={option2}
-                            style={styles.input}
-                            onChangeText={setOption2}
-                            placeholder='Ser famoso'
-                            placeholderTextColor='rgba(255, 255, 255, 0.7)'
-                        />
-                        <Pressable
-                            onPress={handleSend}
-                            style={styles.buttonSolid}
+                    <View style={styles.shadowLeft} />
+                    <View style={styles.viewContainer}>
+                        <LinearGradient
+                            style={styles.gradiantContainer}
+                            colors={['#ff3c3c', '#ff007a']}
                         >
-                            <Text style={styles.buttonSolidLabel}>
-                                Enviar pregunta
-                            </Text>
-                        </Pressable>
-                        <Pressable
-                            onPress={handleModal}
-                            style={styles.buttonOutline}
-                        >
-                            <Text style={styles.buttonOutlineLabel}>
-                                Cancelar
-                            </Text>
-                        </Pressable>
-                    </LinearGradient>
+                            <Text style={styles.title}>¿Qué prefieres?</Text>
+                            <Text style={styles.subtitle}>Envianos tu pregunta y la añadiremos al juego</Text>
+                            <Text style={styles.label}>Opción 1:</Text>
+                            <TextInput
+                                label='Opción 1'
+                                value={option1}
+                                style={styles.input}
+                                onChangeText={setOption1}
+                                placeholder='Ser rico'
+                                placeholderTextColor='rgba(255, 255, 255, 0.7)'
+                            />
+                            <Text style={styles.label}>Opción 2:</Text>
+                            <TextInput
+                                label='Opción 1'
+                                value={option2}
+                                style={styles.input}
+                                onChangeText={setOption2}
+                                placeholder='Ser famoso'
+                                placeholderTextColor='rgba(255, 255, 255, 0.7)'
+                            />
+                            <View style={styles.buttonsContainer}>
+                                <SolidButton label='Enviar pregunta' onPress={handleSend} />
+                                <OutlineButton label='Cancelar' onPress={handleModal} />
+                            </View>
+                        </LinearGradient>
+                    </View>
                 </Animated.View>
             )}
             {isSent && (
@@ -100,27 +93,42 @@ export function SuggestionsModal({ handleModal }) {
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        zIndex: 100,
-        top: 0,
-        bottom: 0,
+        zIndex: 10,
         width: '100%',
+        height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
-    modal: {
+    modalContainer: {
+        position: 'relative',
         width: '90%',
-        height: 'auto',
-        alignItems: 'center',
-        justifyContent: 'center',
     },
-    gradiant: {
+    shadowLeft: {
+        position: 'absolute',
+        zIndex: 0,
+        bottom: 0,
+        left: 0,
+        width: '97%',
+        height: '97%',
+        borderRadius: 16,
+        backgroundColor: 'black',
+    },
+    viewContainer: {
+        zIndex: 1,
+        top: 0,
+        right: 0,
+        width: '98%',
+        borderWidth: 8,
+        borderRadius: 16,
+        borderColor: 'black',
+        alignSelf: 'flex-end',
+        backgroundColor: 'black',
+    },
+    gradiantContainer: {
         width: '100%',
-        height: 'auto',
-        padding: 32,
-        borderRadius: 40,
-        alignItems: 'center',
-        justifyContent: 'center',
+        padding: 30,
+        borderRadius: 8,
     },
     title: {
         fontSize: 32,
@@ -154,33 +162,9 @@ const styles = StyleSheet.create({
         fontFamily: 'Rubik-Medium',
         backgroundColor: 'rgba(255, 255, 255, 0.3)',
     },
-    buttonSolid: {
-        width: '100%',
+    buttonsContainer: {
+        gap: 5,
         marginTop: 20,
-        borderRadius: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 24,
-        alignItems: 'center',
-        backgroundColor: 'white',
-    },
-    buttonOutline: {
-        width: '100%',
-        marginTop: 10,
-        borderWidth: 2,
-        borderRadius: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 24,
-        alignItems: 'center',
-        borderColor: 'white',
-    },
-    buttonSolidLabel: {
-        fontSize: 18,
-        color: 'black',
-        fontFamily: 'Rubik-Medium',
-    },
-    buttonOutlineLabel: {
-        fontSize: 18,
-        color: 'white',
-        fontFamily: 'Rubik-Medium',
+        justifyContent: 'space-between',
     },
 })

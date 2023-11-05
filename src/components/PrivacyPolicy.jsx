@@ -27,8 +27,7 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: 'auto',
-        paddingTop: 0,
-        paddingBottom: 32,
+        padding: 12,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -43,7 +42,7 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 16,
-        color: 'black',
+        color: 'white',
         fontFamily: 'Rubik-Medium',
     },
 })

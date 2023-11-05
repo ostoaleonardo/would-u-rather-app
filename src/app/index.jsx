@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: '#121212',
     },
     scrollView: {
         width: '100%',

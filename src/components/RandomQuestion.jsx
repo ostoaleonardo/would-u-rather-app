@@ -47,7 +47,7 @@ export function RandomQuestion() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>¿Qué Prefieres?</Text>
+            <Text style={styles.title}>¿Qué prefieres?</Text>
             <Text style={styles.subtitle}>Pregunta aleatoria</Text>
             <View style={styles.optionsContainer}>
                 <OptionCard
@@ -100,16 +100,15 @@ const styles = StyleSheet.create({
         paddingTop: 32,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white',
     },
     title: {
         fontSize: 32,
-        color: 'black',
+        color: 'white',
         fontFamily: 'Rubik-Bold',
     },
     subtitle: {
         fontSize: 20,
-        color: 'black',
+        color: 'white',
         fontFamily: 'Rubik-Bold',
     },
     optionsContainer: {

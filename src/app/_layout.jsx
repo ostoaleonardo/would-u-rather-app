@@ -50,6 +50,7 @@ export default function Layout() {
                 headerTitleStyle: {
                     fontFamily: 'Rubik-Bold',
                 },
+                navigationBarHidden: true,
             }}
             onLayout={onLayoutRootView}
         >

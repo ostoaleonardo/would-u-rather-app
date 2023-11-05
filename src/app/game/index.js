@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
         position: 'relative',
-        width: '60%',
+        width: '65%',
         height: 80,
         marginHorizontal: 32,
     },

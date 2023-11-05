@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import Animated, { BounceIn, BounceOut, ZoomIn, ZoomOut } from 'react-native-reanimated'
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import Animated, { ZoomIn, ZoomOut } from 'react-native-reanimated'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { useFetchQuestion } from '../hooks/useFetchQuestion'
 import { LinearGradient } from 'expo-linear-gradient'
 import { SolidButton } from './SolidButton'
@@ -66,24 +66,20 @@ export function SuggestionsModal({ handleModal }) {
             )}
             {isSent && (
                 <Animated.View
-                    style={styles.modal}
-                    entering={BounceIn} exiting={BounceOut}
+                    style={styles.modalContainer}
+                    entering={ZoomIn} exiting={ZoomOut}
                 >
-                    <LinearGradient
-                        style={styles.gradiant}
-                        colors={['#ff3c3c', '#ff007a']}
-                    >
-                        <Text style={styles.title}>¡Gracias!</Text>
-                        <Text style={styles.subtitle}>Estamos revisando tu pregunta, en breve la añadiremos al juego</Text>
-                        <Pressable
-                            onPress={handleModal}
-                            style={styles.buttonSolid}
+                    <View style={styles.shadowLeft} />
+                    <View style={styles.viewContainer}>
+                        <LinearGradient
+                            style={styles.gradiantContainer}
+                            colors={['#ff3c3c', '#ff007a']}
                         >
-                            <Text style={styles.buttonSolidLabel}>
-                                Aceptar
-                            </Text>
-                        </Pressable>
-                    </LinearGradient>
+                            <Text style={styles.title}>¡Gracias!</Text>
+                            <Text style={styles.subtitle}>Estamos revisando tu pregunta, en breve la añadiremos al juego</Text>
+                            <SolidButton label='Aceptar' onPress={handleModal} />
+                        </LinearGradient>
+                    </View>
                 </Animated.View>
             )}
         </View>
